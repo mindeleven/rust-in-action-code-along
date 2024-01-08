@@ -1,3 +1,7 @@
+/// coding along with Rust in Action by Tim McNamara
+/// Chapter 1, Introducing Rust, example 1, hello world
+/// code examples and comments are taken from the book
+/// 
 fn main() {
     greet_world();
 }
