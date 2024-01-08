@@ -32,11 +32,15 @@ fn main() {
             // trims the whitespace from every field
             .map(|field| field.trim())
             .collect();
-
-        println!("{:?}", fields);
+        
+        // the following code block only makes sense if debugging is enabled
+        // exclamation mark (!) indicates a macro invocation
+        if cfg!(debug_assertions) {
+            // eprintln! prints to standard error
+            // {:?} syntax prints out default debugging representation
+            eprintln!("debug: {:?} -> {:?}", record, fields);
+        }
 
     }
 
-
-    println!("Hello, world!");
 }
