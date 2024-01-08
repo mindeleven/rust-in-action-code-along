@@ -1,3 +1,7 @@
+/// coding along with Rust in Action by Tim McNamara
+/// Chapter 1, Introducing Rust, example 2, basic processing of some CSV data
+/// code examples and comments are taken from the book
+/// 
 fn main() {
     // csv data example
     let penguin_data ="\
@@ -40,7 +44,28 @@ fn main() {
             // {:?} syntax prints out default debugging representation
             eprintln!("debug: {:?} -> {:?}", record, fields);
         }
-
+        
+        // get certain entry by indexing the collection with an integer
+        let name = fields[0];
+        
+        // parsing the string into another types with parse
+        // the type information has to be provided on the left-hand side
+        // either returns a value or an error value wrapped in a Result
+        // underscore requests the compiler to infer the error type itself
+        let maybe_length: Result<f32, _> = fields[1].parse();
+        
+        // skip data in case of error
+        if maybe_length.is_err() {
+            continue;
+        }
+        
+        // unwrap the value from the Result
+        let length = maybe_length.unwrap();
+        
+        // println! prints to stdout
+        // {} syntax indicates programmer-defined method to represent
+        // the value as a string should be used
+        println!("{}, {}cm", name, length);
     }
 
 }
