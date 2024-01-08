@@ -66,6 +66,12 @@ fn main() {
         // {} syntax indicates programmer-defined method to represent
         // the value as a string should be used
         println!("{}, {}cm", name, length);
+
+        // cargo run returns output with debugging info because of cfg!(debug_assertions)
+        // to get output w/o debugging information run
+        // cargo run --release
+        // output can be further reduced by adding the -q flag (-q for "quiet")
+        // cargo run -q --release
     }
 
 }
