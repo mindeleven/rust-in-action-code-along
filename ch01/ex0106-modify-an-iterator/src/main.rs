@@ -17,7 +17,7 @@ fn main() {
         'a', 'b', 'b'
     ];
     
-    // iterrating over letters
+    // iterating over letters
     for letter in letters {
         println!("{}", letter);
         // creating a new copy of letter and appending it to the end of letters
