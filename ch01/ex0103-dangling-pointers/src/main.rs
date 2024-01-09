@@ -7,6 +7,8 @@
 /// that has become invalid over the course of the program
 /// example: attempting to create a dangling pointer
 /// 
+/// THIS EXAMPLE DOES NOT COMPILE
+/// 
 /// derive(Debug) annotation allows the enum to be printed by the println! macro
 #[derive(Debug)]
 #[allow(dead_code)]
