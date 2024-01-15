@@ -45,10 +45,32 @@ fn main() {
             for z in 0.. {
                 println!("x + y + z = {}", x + y + z);
                 if x + y + z > 10 {
-                    print!("time to break up");
+                    print!("time to break up\n");
                     break 'outer;
                 }
             }
         }
+    }
+
+    // conditional testing
+    // conditional tests return values
+    // Rust is an expression based language which means all expressions return values
+    // this allows to assign variables directly from the return value of a conditional expression
+    println!("\nexample for assigning variables from the return value of a conditional expression:");
+    let num_to_test = 1234561;
+    let description = if is_even(num_to_test) {
+        "even"
+    } else {
+        "odd"
+    };
+    println!("{} is {}", num_to_test, description);
+}
+
+/// example of helper function for conditional testing
+fn is_even(a: i32) -> bool {
+    if a % 2 == 0 {
+        true
+    } else {
+        false
     }
 }
