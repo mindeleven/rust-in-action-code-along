@@ -6,6 +6,7 @@
 /// code examples and comments are taken from the book
 /// 
 
+/// import complex number type
 use num::complex::Complex;
 
 fn main() {
@@ -14,6 +15,8 @@ fn main() {
     render_mandelbrot(mandelbrot);
 }
 
+/// function that converts between the output space (a grid of rows and columns) 
+/// and a range that surrounds the Mandelbrot set (a continuous region near (0,0))
 fn calculate_mandelbrot(
     max_iters: usize,
     x_min: f64,
@@ -39,6 +42,8 @@ fn calculate_mandelbrot(
     all_rows
 }
 
+/// functionality that is called at every "pixel", e.g. for every row and column 
+/// that’s printed to stdout
 fn mandelbrot_at_point(cx: f64, cy: f64, max_iters: usize) -> usize {
     let mut z = Complex { re: 0.0, im: 0.0 };
     let c: Complex<f64> = Complex::new(cx, cy);
