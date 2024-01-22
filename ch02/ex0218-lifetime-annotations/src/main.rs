@@ -33,3 +33,17 @@ fn add_with_lifetimes<'a, 'b>(i: &'a i32, j: &'b i32) -> i32 {
     // rather than adding the reference directly
     *i + *j
 }
+
+/// Generic funtions
+/// -> functions that can handle many possible input types
+/// expample: a function that can be called by many input types (as long as they are all the same)
+/// T is a type variable
+/// capital letters in place of a type indicate a generic type
+/// conventionelly U, U and V are used
+/// only a subset of all types implement addition
+/// when creating generic functions that include an operator
+/// that operator's trait must be included as a trait bound
+#[allow(dead_code)]
+fn add<T: std::ops::Add<Output = T>>(i: T, j: T) -> T {
+    i + j
+}
