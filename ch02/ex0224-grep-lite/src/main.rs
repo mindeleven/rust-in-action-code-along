@@ -9,14 +9,16 @@ fn main() {
 Every face, every shop, bedroom window, public-house, and
 dark square is a picture feverishly turned--in search of what?
 It is the same with books. What do we seek through millions of pages?";
-    let mut line_num: usize = 1;
+    // line counter no longer needed when enumerate() is used
+    // let mut line_num: usize = 1;
     
     // the lines method returns an iterator over quote
-    for line in quote.lines() {
+    // the iterator can be chained with enumerate()
+    for (i, line) in quote.lines().enumerate() {
         // searching for text using method syntax
         if line.contains(search_term) {
-            println!("{}: {}", line_num, line);
+            println!("{}: {}", i+1, line);
         }
-        line_num += 1;
+        // line_num += 1;
     }
 }
