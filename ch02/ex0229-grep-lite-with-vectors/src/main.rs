@@ -10,7 +10,13 @@
 /// -> (1) first pass, we’ll tag lines that match
 /// -> (2) second pass, we’ll collect lines that are within n lines of each of the tags
 /// 
+/// bringing the Regex type from the regex crate into local scope
+use regex::Regex;
+
 fn main() {
+    // unwrap() "unwraps" a Result, crashing if an error occurs
+    let re = Regex::new("picture").unwrap();
+
     // number of context lines we want to store before and after
     let context_lines = 2;
     let needle = "oo";
@@ -22,7 +28,22 @@ feverishly turned--in search of what?
 It is the same with books.
 What do we seek
 through millions of pages?";
-    
+
+    // let's see what we find with regex
+    println!("let's see what we find with regex");
+    for line in haystack.lines() {
+        let contains_substring = re.find(line);
+        // replacing contains() method with a match block
+        match contains_substring {
+            // Some(T) is the positive case of an Option
+            // it means that re.find() has been successful
+            Some(_) => println!("{}", line),
+            // None is the negative case of an Option
+            // () can be thought of as a null placeholder value here.
+            None => ()
+        }
+    }
+
     // tag vector to hold line numbers where matches occur
     let mut tags: Vec<usize> = Vec::new();
     
