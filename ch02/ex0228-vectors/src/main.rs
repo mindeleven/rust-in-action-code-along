@@ -40,4 +40,38 @@ fn main() {
         None => println!("v2 doesn't have an element at this spot")
     }
     
+    // the get method returns None without panicking 
+    // if it's passed an index that is outside the vector
+    let no_panic = v2.get(100);
+    match no_panic {
+        Some(no_panic) => println!("100th element of vector v2: {}", no_panic),
+        None => println!("v2 doesn't have an element at spot 100")
+    }
+
+    // attempting to add an element to a vector while holding a reference to an item
+    // will result in a compile error
+    // error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
+    /*
+    let first = &v[0]; // immutable borrow occurs here
+    v.push(6); // mutable borrow occurs here
+    println!("The first element is: {first}"); // immutable borrow later used here
+    */
+
+    // iterating over the values in a vector
+    let vec = vec![100, 567, 99, 12];
+    // printing each element in a vector using a for loop
+    for v in &vec {
+        println!("{}", v);
+    }
+
+    // iterating over mutable references to each element in a mutable vector 
+    // in order to make changes to all the elements
+    let mut mut_vec = vec![100, 567, 99, 12, 33, 98];
+    // iterating over mutable references to elements in a vector
+    for v in &mut mut_vec {
+        // to change the value a mutable reference refers to, use the * dereference operator
+        *v += 50;
+    }
+    println!("mutated vector: {:?}", mut_vec);
+
 }
