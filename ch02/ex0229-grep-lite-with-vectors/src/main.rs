@@ -12,10 +12,26 @@
 /// 
 /// bringing the Regex type from the regex crate into local scope
 use regex::Regex;
+use clap::{App, Arg};
 
 fn main() {
+    // incrementally build up a command argument parser
+    // each argument takes an Arg
+    // cargo run -- <pattern>
+    // example: cargo run -- fever
+    let args = App::new("grep-lite")
+        .version("0.1")
+        .about("searches for patterns")
+        .arg(Arg::with_name("pattern")
+            .help("The pattern to search for")
+            .takes_value(true)
+            .required(true)
+        )
+        .get_matches();
+    
+    let pattern = args.value_of("pattern").unwrap();
     // unwrap() "unwraps" a Result, crashing if an error occurs
-    let re = Regex::new("picture").unwrap();
+    let re = Regex::new(pattern).unwrap();
 
     // number of context lines we want to store before and after
     let context_lines = 2;
