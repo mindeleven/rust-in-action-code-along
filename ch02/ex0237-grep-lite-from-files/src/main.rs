@@ -13,9 +13,12 @@
 use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*;
+use regex::Regex;
+use clap::{App,Arg};
 
 fn main() {
     // creating a File requires a path argument and error handling
+    /* 
     let f = File::open("./src/readme.txt").unwrap();
     let mut reader = BufReader::new(f);
 
@@ -34,7 +37,25 @@ fn main() {
         // preventing lines from persisting into the following ones
         line.truncate(0);
     }
+    */
+    // incrementally build up a command argument parser
+    // each argument takes an Arg
+    // cargo run -- <pattern>
+    // example: cargo run -- fever
+    let args = App::new("grep-lite")
+        .version("0.1")
+        .about("searches for patterns")
+        .arg(Arg::with_name("pattern")
+        .help("The pattern to search for")
+        .takes_value(true)
+        .required(true))
+        .get_matches();
+    let pattern = args.value_of("pattern").unwrap();
+    let re = Regex::new(pattern).unwrap();
     
+    println!("pattern from command line: {}", re.as_str());
+
+
     // alternate approach: reading a file line by line via BufReader::lines()
     println!("=> alternate approach: reading a file line by line via BufReader::lines()");
     let f_2 = File::open("./src/readme.txt").unwrap();
