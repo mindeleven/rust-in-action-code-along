@@ -46,16 +46,21 @@ fn main() {
         .version("0.1")
         .about("searches for patterns")
         .arg(Arg::with_name("pattern")
-        .help("The pattern to search for")
-        .takes_value(true)
-        .required(true))
+            .help("The pattern to search for")
+            .takes_value(true)
+            .required(true))
+        .arg(Arg::with_name("input")
+            .help("File to search")
+            .takes_value(true)
+            .required(true))
         .get_matches();
     let pattern = args.value_of("pattern").unwrap();
     let re = Regex::new(pattern).unwrap();
-    
     println!(">>>> pattern from command line: {}", re.as_str());
 
-
+    let input = args.value_of("input").unwrap();
+    println!(">>>> input from command line: {}", input.to_string());
+    
     // alternate approach: reading a file line by line via BufReader::lines()
     println!("=> alternate approach: reading a file line by line via BufReader::lines()");
     let f_2 = File::open("./src/readme.txt").unwrap();
