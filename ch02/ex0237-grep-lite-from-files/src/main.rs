@@ -10,6 +10,28 @@
 /// general pattern is to open a file object, the wrap it in BufReader
 /// 
 
+use std::fs::File;
+use std::io::BufReader;
+use std::io::prelude::*;
+
 fn main() {
-    println!("Hello, world!");
+    // creating a File requires a path argument and error handling
+    let f = File::open("./src/readme.txt").unwrap();
+    let mut reader = BufReader::new(f);
+
+    let mut line = String::new();
+    loop {
+        // reading from disk can fail and we need to explicitly handle this
+        // in this case, errors crash the program
+        let len = reader.read_line(&mut line).unwrap();
+        if len == 0 {
+            break
+        }
+
+        println!("{} ({} bytes long)", line, len);
+        
+        // shrink the string back to length 0
+        // preventing lines from persisting into the following ones
+        line.truncate(0);
+    }
 }
