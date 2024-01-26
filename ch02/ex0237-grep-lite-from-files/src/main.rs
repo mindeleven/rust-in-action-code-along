@@ -63,7 +63,10 @@ fn main() {
     
     // alternate approach: reading a file line by line via BufReader::lines()
     println!("=> alternate approach: reading a file line by line via BufReader::lines()");
-    let f_2 = File::open("./src/readme.txt").unwrap();
+    // let f_2 = File::open("./src/readme.txt").unwrap();
+    // let reader_2 = BufReader::new(f_2);
+    // using command line argument instead
+    let f_2 = File::open(input).unwrap();
     let reader_2 = BufReader::new(f_2);
     // BufReader::lines() removes the trailing newline character from each line
     /* 
