@@ -40,8 +40,8 @@ fn main() {
     */
     // incrementally build up a command argument parser
     // each argument takes an Arg
-    // cargo run -- <pattern>
-    // example: cargo run -- fever
+    // cargo run -- <pattern> <file>
+    // example: cargo run -- fever ./src/readme.txt
     let args = App::new("grep-lite")
         .version("0.1")
         .about("searches for patterns")
