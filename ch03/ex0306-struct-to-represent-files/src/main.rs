@@ -24,9 +24,6 @@ struct File {
 /// Hostname is our newtype
 struct Hostname(String);
 
-/// creating a type alias
-// type FileType = String;
-
 fn open(f: &mut File) -> bool {
     true
 }
@@ -55,12 +52,6 @@ fn read(f: &File, save_to: &mut Vec<u8>) -> usize {
 
 #[allow(unused_variables)]
 fn main() {
-    // File "inherits" all of String’s methods
-    // let mut f1 = FileType::from("f1.txt");
-    // open(&mut f1);
-    // read(&mut f1, vec![]);
-    // close(&mut f1);
-
     // creating a file from the File struct
     // creating a first instance of File
     let mut f2 = File {
