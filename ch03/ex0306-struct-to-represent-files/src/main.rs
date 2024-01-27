@@ -17,6 +17,17 @@ struct File {
     data: Vec<u8>,
 }
 
+// using impl to add methods to a struct
+impl File {
+    fn new(name: &str) -> File {
+        // File::new() does encapsulates the object creation syntax
+        File {
+            name: String::from(name),
+            data: Vec::new(),
+        }
+    }
+}
+
 /// PartialEq enables types to be compared for equality
 #[derive(PartialEq)]
 /// the newtype pattern consists of wrapping a core type 
@@ -79,6 +90,14 @@ fn main() {
     println!("{} is {} bytes long", f2_name, f2_length);
     // view the bytes 114, 117, 115, 116 & 33 as an actual word
     println!("{}", text);
+    
+    // creating another File with the new() method
+    let f3 = File::new("f3.txt");
+    // fields are private by default, but can be accessed within the module that defines the struct
+    let f3_name = &f3.name;
+    let f3_length = f3.data.len();
+     println!("{:?}", f3);
+     println!("{} is {} bytes long", f3_name, f3_length);
 
     // creating an ordinary string to compare it withn the Hostname newtype
     let ordinary_string = String::from("localhost");
