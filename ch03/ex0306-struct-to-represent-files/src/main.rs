@@ -28,11 +28,11 @@ struct Hostname(String);
 /// creating a type alias
 type FileType = String;
 
-fn open(f: &mut FileType) -> bool {
+fn open(f: &mut File) -> bool {
     true
 }
 
-fn close(f: &mut FileType) -> bool {
+fn close(f: &mut File) -> bool {
     true
 }
 
@@ -40,8 +40,18 @@ fn close(f: &mut FileType) -> bool {
 /// using ! as a return type indicates to the Rust compiler that this function never returns
 /// ! is known as the “Never” type
 #[allow(dead_code)]
-fn read(f: &mut FileType, save_to: &mut Vec<u8>) -> ! {
-    unimplemented!()
+// read function returns the "number of bytes read"
+fn read(f: &File, save_to: &mut Vec<u8>) -> usize {
+    // make a copy of the data here
+    // as save_to.append() will shrink the input Vec<T>
+    let mut tmp = f.data.clone();
+    // ensure that there is sufficient space to fit the incoming data
+    // and minimizes allocations when data is inserted byte-by-byte
+    let read_length = tmp.len();
+    save_to.reserve(read_length);
+    // allocate sufficient data in the save_to buffer to hold the contents of f
+    save_to.append(&mut tmp);
+    read_length
 }
 
 #[allow(unused_variables)]
