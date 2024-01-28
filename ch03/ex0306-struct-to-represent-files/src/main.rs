@@ -34,10 +34,10 @@ impl File {
         f
     }
 
-    /// relaxing a compiler warning about an unused function
-    /// using ! as a return type indicates to the Rust compiler that this function never returns
-    /// ! is known as the “Never” type
-    #[allow(dead_code)]
+    // relaxing a compiler warning about an unused function
+    // using ! as a return type indicates to the Rust compiler that this function never returns
+    // ! is known as the “Never” type
+    //#[allow(dead_code)]
     // read function returns the "number of bytes read"
     fn read(self: &File, save_to: &mut Vec<u8>) -> usize {
         // make a copy of the data here
@@ -69,31 +69,10 @@ fn close(f: &mut File) -> bool {
     true
 }
 
-/// relaxing a compiler warning about an unused function
-/// using ! as a return type indicates to the Rust compiler that this function never returns
-/// ! is known as the “Never” type
-/* 
-#[allow(dead_code)]
-// read function returns the "number of bytes read"
-fn read(f: &File, save_to: &mut Vec<u8>) -> usize {
-    // make a copy of the data here
-    // as save_to.append() will shrink the input Vec<T>
-    let mut tmp = f.data.clone();
-    // ensure that there is sufficient space to fit the incoming data
-    // and minimizes allocations when data is inserted byte-by-byte
-    let read_length = tmp.len();
-    save_to.reserve(read_length);
-    // allocate sufficient data in the save_to buffer to hold the contents of f
-    save_to.append(&mut tmp);
-    read_length
-}
-*/
-
 #[allow(unused_variables)]
 fn main() {
     // creating a file from the File struct
     // creating a first instance of File
-    /* 
     let mut f2 = File {
         // String::from allows owned strings to be generated from string literals
         name: String::from("f2.txt"),
@@ -104,7 +83,7 @@ fn main() {
     let mut buffer: Vec<u8> = vec![];
 
     open(&mut f2);
-    let f2_length = read(&f2, &mut buffer);
+    let f2_length = f2.read(&mut buffer);
     close(&mut f2);
 
     // convert Vec<u8> to String
@@ -119,7 +98,7 @@ fn main() {
     println!("{} is {} bytes long", f2_name, f2_length);
     // view the bytes 114, 117, 115, 116 & 33 as an actual word
     println!("{}", text);
-    */
+    
     // creating another File with the new() method
     let f3 = File::new("f3.txt");
     // fields are private by default, but can be accessed within the module that defines the struct
@@ -134,7 +113,7 @@ fn main() {
     let f4_data: Vec<u8> = vec![114, 117, 115, 116, 33];
     let mut f4 = File::new_with_data("f4.txt", &f4_data);
 
-    let mut buffer: Vec<u8> = vec![];
+    //let mut buffer: Vec<u8> = vec![];
     
     open(&mut f4);
     let f4_length = f4.read(&mut buffer);
