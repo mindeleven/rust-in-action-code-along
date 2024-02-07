@@ -1,3 +1,4 @@
+//! Simulating files one step at a time
 #![allow(dead_code)]
 /// coding along with Rust in Action by Tim McNamara
 /// Chapter 3, Compound Data Types, chapter 3.6.2,
@@ -51,14 +52,25 @@ impl Display for File {
 }
 
 impl File {
-    // even though the File struct is public
-    // its methods must be explicitly marked as such too
+    /// even though the File struct is public
+    /// its methods must be explicitly marked as such too
+    /// new files are assumed to be empty, but a name is required
     pub fn new(name: &str) -> File {
         File {
             name: String::from(name),
             data: Vec::new(),
             state: FileState::Closed,
         }
+    }
+
+    /// Returns the file's length in bytes.
+    pub fn len(&self) -> usize {
+        self.data.len()
+    }
+
+    /// Returns the file's name.
+    pub fn name(&self) -> String {
+        self.name.clone()
     }
 }
 
