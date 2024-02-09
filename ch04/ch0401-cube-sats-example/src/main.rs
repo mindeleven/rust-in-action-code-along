@@ -12,6 +12,13 @@ enum StatusMessage {
     Ok,
 }
 
+// creating a type to model our satellites
+// modelling a CubeSat as its own type
+#[derive(Debug)]
+struct CubeSat {
+    id: u64,
+}
+
 fn check_status(sat_id: u64) -> StatusMessage {
     StatusMessage::Ok
 }
