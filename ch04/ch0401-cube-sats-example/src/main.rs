@@ -9,7 +9,8 @@
 /// -> the borrow checker checks that all access to data is legal
 /// 
 /// borrow checking relies on three inter-related concepts 
-/// -> (1) ownership => ownership relates to cleaning values up when they’re no longer needed
+/// -> (1) ownership => every value in Rust is owned
+///        ownership relates to cleaning values up when they’re no longer needed
 ///        owners cannot prevent other parts of the program from accessing their values
 /// -> (2) lifetime => a value’s lifetime is the period when accessing that value is valid behavior
 /// -> (3) borrowing => to borrow a value means to access it
@@ -23,6 +24,7 @@
 /// 
 
 /// enum to check the status of each satellite 
+/// only primitive types have copy semantics whereas all other types have move semantics
 #[derive(Debug)]
 enum StatusMessage {
     Ok,
@@ -36,25 +38,34 @@ struct CubeSat {
 }
 
 /// using the CubeSat type within check_status()
-fn check_status(sat_id: CubeSat) -> StatusMessage {
-    StatusMessage::Ok
+/// a 1st adjustment to check_status()
+/// -> allows to give back the ownership of the CubeSats to the original variables
+/// -> printout becomes a side effect
+fn check_status(sat_id: CubeSat) -> CubeSat {
+    println!("{:?}: {:?}", sat_id, StatusMessage::Ok);
+    sat_id
 }
 
 fn main() {
     // model with three CubeSats
+    // ownership originates at the creation of the CubeSat object
     let sat_a = CubeSat {id: 0};
     let sat_b = CubeSat {id: 1};
     let sat_c = CubeSat {id: 2};
-
-    let a_status: StatusMessage = check_status(sat_a);
-    let b_status = check_status(sat_b);
-    let c_status = check_status(sat_c);
-    println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
+    
+    // now the return value of check_status() is the original CubeSat
+    // the new let binding is "reset"
+    let sat_a = check_status(sat_a);
+    let sat_b = check_status(sat_b);
+    let sat_c = check_status(sat_c);
+    // printout now is a side effect of the function and not needed here
+    // println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
 
     // "waiting" ...
-    let a_status: StatusMessage = check_status(sat_a);
-    let b_status = check_status(sat_b);
-    let c_status = check_status(sat_c);
-    println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
+    // we can do it again without any compiler complains
+    let sat_a = check_status(sat_a);
+    let sat_b = check_status(sat_b);
+    let sat_c = check_status(sat_c);
+    // println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
 
 }
