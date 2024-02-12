@@ -39,6 +39,12 @@ struct CubeSat {
     mailbox: Mailbox
 }
 
+impl CubeSat {
+    fn recv(&mut self) -> Option<Message> {
+        self.mailbox.messages.pop()
+    }
+}
+
 /// defining new struct that contains a vector of Messages within its messages field
 /// String has been aliased to Message below giving us the functionality of the String type
 #[derive(Debug)]
@@ -48,7 +54,19 @@ struct Mailbox {
 
 type Message = String;
 
+/// defining a struct to represent the ground station
 struct GroundStation;
+
+impl GroundStation {
+    // &self indicates that GroundStation.send() only requires a read-only reference
+    // recipient "to" is taking a mutable borrow (&mut) of the CubeSat instance
+    // msg takes full ownership of its Message instance
+    fn send(&self, to: &mut CubeSat, msg: Message) {
+        // ownership of the Message instance transfers from msg 
+        // into messages.push() as a local variable
+        to.mailbox.messages.push(msg);
+    }
+}
 
 /// using the CubeSat type within check_status()
 /// a 1st adjustment to check_status()
