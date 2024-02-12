@@ -48,6 +48,8 @@ struct Mailbox {
 
 type Message = String;
 
+struct GroundStation;
+
 /// using the CubeSat type within check_status()
 /// a 1st adjustment to check_status()
 /// -> allows to give back the ownership of the CubeSats to the original variables
@@ -60,9 +62,9 @@ fn check_status(sat_id: CubeSat) -> CubeSat {
 fn main() {
     // model with three CubeSats
     // ownership originates at the creation of the CubeSat object
-    let sat_a = CubeSat {id: 0};
-    let sat_b = CubeSat {id: 1};
-    let sat_c = CubeSat {id: 2};
+    let sat_a = CubeSat {id: 0, mailbox: Mailbox { messages: vec![] }};
+    let sat_b = CubeSat {id: 1, mailbox: Mailbox { messages: vec![] }};
+    let sat_c = CubeSat {id: 2, mailbox: Mailbox { messages: vec![] }};
     
     // now the return value of check_status() is the original CubeSat
     // the new let binding is "reset"
