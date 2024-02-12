@@ -35,7 +35,18 @@ enum StatusMessage {
 #[derive(Debug)]
 struct CubeSat {
     id: u64,
+    // adding Mailbox as a new field
+    mailbox: Mailbox
 }
+
+/// defining new struct that contains a vector of Messages within its messages field
+/// String has been aliased to Message below giving us the functionality of the String type
+#[derive(Debug)]
+struct Mailbox {
+    messages: Vec<Message>,
+}
+
+type Message = String;
 
 /// using the CubeSat type within check_status()
 /// a 1st adjustment to check_status()
