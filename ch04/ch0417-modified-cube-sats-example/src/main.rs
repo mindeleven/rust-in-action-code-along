@@ -48,7 +48,15 @@ struct Mailbox {
     messages: Vec<Message>,
 }
 
-type Message = String;
+/// type Message = String;
+/// storing the Message in a struct so that it can live 
+/// somewhere outside of the CubeSat instances
+/// otherwise it would die when the for loop to create the CubeSats ends
+#[derive(Debug)]
+struct Message {
+    to: u64,
+    content: String,
+}
 
 /// defining a struct to represent the ground station
 struct GroundStation;
@@ -61,6 +69,14 @@ impl GroundStation {
         // ownership of the Message instance transfers from msg 
         // into messages.push() as a local variable
         to.mailbox.messages.push(msg);
+    }
+
+    // method that allows us to create a CubeSat instance on demand once
+    fn connect(&self, sat_id: u64) -> CubeSat {
+        CubeSat {
+            id: sat_id,
+            mailbox: Mailbox { messages: vec![] }
+        }
     }
 }
 
@@ -75,15 +91,30 @@ fn check_status(sat_id: CubeSat) -> CubeSat {
 
 fn main() {
     let base = GroundStation {};
-
+    
+    // fetching the stored sat ids
+    let sat_ids = fetch_sat_ids();
+    
+    for sat_id in sat_ids {
+        // creating sat objects for the lifetime of the for loop
+        let mut sat = base.connect(sat_id);
+        base.send(
+            &mut sat, 
+            Message { to: sat_id, content: String::from("Hello from for loop no. 1")}
+        );
+    }
 
     // model with three CubeSats
     // ownership originates at the creation of the CubeSat object
-    let mut sat_a = CubeSat {id: 0, mailbox: Mailbox { messages: vec![] }};
+    let sat_a_id = 0;
+    let mut sat_a = CubeSat {id: sat_a_id, mailbox: Mailbox { messages: vec![] }};
 
     println!("t0: {:?}", sat_a);
 
-    base.send(&mut sat_a, Message::from("Hello there!"));
+    base.send(
+        &mut sat_a, 
+        Message { to: sat_a_id, content: String::from("Hello from for loop no. 1")}
+    );
 
     println!("t1: {:?}", sat_a);
 
