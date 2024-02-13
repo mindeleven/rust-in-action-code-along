@@ -50,7 +50,7 @@ struct Mailbox {
 
 impl Mailbox {
     // Mailbox.post() requires mutable access to itself and ownership over a Message
-    fn post(&mut self, msg: Message) {
+    fn post(&mut self, to: &CubeSat, msg: Message) {
         self.messages.push(msg);
     }
     
@@ -86,6 +86,7 @@ struct Message {
 struct GroundStation;
 
 impl GroundStation {
+    /*
     // &self indicates that GroundStation.send() only requires a read-only reference
     // recipient "to" is taking a mutable borrow (&mut) of the CubeSat instance
     // msg takes full ownership of its Message instance
@@ -93,6 +94,12 @@ impl GroundStation {
         // ownership of the Message instance transfers from msg 
         // into messages.push() as a local variable
         to.mailbox.messages.push(msg);
+    }
+    */
+    // sending messages becomes a call to Mailbox.post()
+    // yielding ownership of a Message
+    fn send(&self, mailbox: &mut Mailbox, to: &CubeSat, msg: Message) {
+        mailbox.post(to, msg);
     }
 
     // method that allows us to create a CubeSat instance on demand once
@@ -114,6 +121,8 @@ fn check_status(sat_id: CubeSat) -> CubeSat {
 }
 
 fn main() {
+    let mut mail = Mailbox { messages: vec![] };
+    
     let base = GroundStation {};
     
     // fetching the stored sat ids
@@ -123,6 +132,7 @@ fn main() {
         // creating sat objects for the lifetime of the for loop
         let mut sat = base.connect(sat_id);
         base.send(
+            &mut mail,
             &mut sat, 
             Message { to: sat_id, content: String::from("Hello from for loop no. 1")}
         );
@@ -136,6 +146,7 @@ fn main() {
     println!("t0: {:?}", sat_a);
 
     base.send(
+        &mut mail,
         &mut sat_a, 
         Message { to: sat_a_id, content: String::from("Hello from for loop no. 1")}
     );
