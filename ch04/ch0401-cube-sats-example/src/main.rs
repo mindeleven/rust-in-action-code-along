@@ -33,6 +33,7 @@ enum StatusMessage {
 /// creating a type to model our satellites
 /// modelling a CubeSat as its own type
 #[derive(Debug)]
+#[allow(dead_code)]
 struct CubeSat {
     id: u64,
     // adding Mailbox as a new field
@@ -78,25 +79,31 @@ fn check_status(sat_id: CubeSat) -> CubeSat {
 }
 
 fn main() {
+    let base = GroundStation {};
+
+
     // model with three CubeSats
     // ownership originates at the creation of the CubeSat object
-    let sat_a = CubeSat {id: 0, mailbox: Mailbox { messages: vec![] }};
-    let sat_b = CubeSat {id: 1, mailbox: Mailbox { messages: vec![] }};
-    let sat_c = CubeSat {id: 2, mailbox: Mailbox { messages: vec![] }};
+    let mut sat_a = CubeSat {id: 0, mailbox: Mailbox { messages: vec![] }};
+
+    println!("t0: {:?}", sat_a);
+
+    base.send(&mut sat_a, Message::from("Hello there!"));
+
+    println!("t1: {:?}", sat_a);
+
+    let msg = sat_a.recv();
     
+    println!("t2: {:?}", sat_a);
+    
+    println!("msg: {:?}", msg);
+
     // now the return value of check_status() is the original CubeSat
     // the new let binding is "reset"
-    let sat_a = check_status(sat_a);
-    let sat_b = check_status(sat_b);
-    let sat_c = check_status(sat_c);
-    // printout now is a side effect of the function and not needed here
-    // println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
+    // let sat_a = check_status(sat_a);
 
     // "waiting" ...
     // we can do it again without any compiler complains
     let sat_a = check_status(sat_a);
-    let sat_b = check_status(sat_b);
-    let sat_c = check_status(sat_c);
-    // println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
 
 }
