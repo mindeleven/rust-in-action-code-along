@@ -48,6 +48,30 @@ struct Mailbox {
     messages: Vec<Message>,
 }
 
+impl Mailbox {
+    // Mailbox.post() requires mutable access to itself and ownership over a Message
+    fn post(&mut self, msg: Message) {
+        self.messages.push(msg);
+    }
+    
+    // Mailbox.deliver() requires a shared reference to a CubeSat to pull out its id field
+    fn deliver(&mut self, recipient: &CubeSat) -> Option<Message> {
+        for i in 0..self.messages.len() {
+            if self.messages[i].to == recipient.id {
+                // actually an anti-pattern:
+                // mutating a collection while it is being iterated over
+                // legal here because of the return on the next line
+                let msg = self.messages.remove(i);
+                // if we find a message
+                // return early with the Message wrapped in Some
+                return Some(msg);
+            }
+        }
+        // when no messages are found return None
+        None
+    }
+}
+
 /// type Message = String;
 /// storing the Message in a struct so that it can live 
 /// somewhere outside of the CubeSat instances
