@@ -9,6 +9,15 @@
 /// modification of the code example at ch0401-cube-sats-example
 /// that's based on the first part of the chapter
 
+/// functionality to return CubeSat identifiers
+/// function is assumed to be some kind of database that's responsible for communication
+/// when communication with a satellite is needed we create a new object
+/// so there is no requirement for us to maintain live objects 
+/// for the whole of the program’s duration
+fn fetch_sat_ids() -> Vec<u64> {
+    vec![1, 2, 3]
+}
+
 /// enum to check the status of each satellite 
 /// only primitive types have copy semantics whereas all other types have move semantics
 #[derive(Debug)]
