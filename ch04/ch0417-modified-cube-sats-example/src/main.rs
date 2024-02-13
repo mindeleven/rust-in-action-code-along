@@ -1,4 +1,5 @@
 #![allow(unused_variables)]
+#![allow(dead_code)]
 /// coding along with Rust in Action by Tim McNamara
 /// Chapter 4, Lifetimes, Ownership and Borrowing, 
 /// chapter 4.1, “Implementing” a Mock CubeSat Ground Station, 
@@ -18,13 +19,6 @@ fn fetch_sat_ids() -> Vec<u64> {
     vec![1, 2, 3]
 }
 
-/// enum to check the status of each satellite 
-/// only primitive types have copy semantics whereas all other types have move semantics
-#[derive(Debug)]
-enum StatusMessage {
-    Ok,
-}
-
 /// creating a type to model our satellites
 /// modelling a CubeSat as its own type
 #[derive(Debug)]
@@ -36,8 +30,11 @@ struct CubeSat {
 }
 
 impl CubeSat {
-    fn recv(&mut self) -> Option<Message> {
-        self.mailbox.messages.pop()
+    // fn recv(&mut self) -> Option<Message> {
+    //     self.mailbox.messages.pop()
+    // }
+    fn recv(&self, mailbox: &mut Mailbox) -> Option<Message> {
+        mailbox.deliver(&self)
     }
 }
 
@@ -111,15 +108,6 @@ impl GroundStation {
     }
 }
 
-/// using the CubeSat type within check_status()
-/// a 1st adjustment to check_status()
-/// -> allows to give back the ownership of the CubeSats to the original variables
-/// -> printout becomes a side effect
-fn check_status(sat_id: CubeSat) -> CubeSat {
-    println!("{:?}: {:?}", sat_id, StatusMessage::Ok);
-    sat_id
-}
-
 fn main() {
     let mut mail = Mailbox { messages: vec![] };
     
@@ -138,33 +126,14 @@ fn main() {
         );
     }
 
-    // model with three CubeSats
-    // ownership originates at the creation of the CubeSat object
-    let sat_a_id = 0;
-    let mut sat_a = CubeSat {id: sat_a_id, mailbox: Mailbox { messages: vec![] }};
+    // fetching the stored sat ids a second time
+    let sat_ids = fetch_sat_ids();
 
-    println!("t0: {:?}", sat_a);
+    for sat_id in sat_ids {
+        let sat = base.connect(sat_id);
 
-    base.send(
-        &mut mail,
-        &mut sat_a, 
-        Message { to: sat_a_id, content: String::from("Hello from for loop no. 1")}
-    );
-
-    println!("t1: {:?}", sat_a);
-
-    let msg = sat_a.recv();
-    
-    println!("t2: {:?}", sat_a);
-    
-    println!("msg: {:?}", msg);
-
-    // now the return value of check_status() is the original CubeSat
-    // the new let binding is "reset"
-    // let sat_a = check_status(sat_a);
-
-    // "waiting" ...
-    // we can do it again without any compiler complains
-    let sat_a = check_status(sat_a);
+        let msg = sat.recv(&mut mail);
+        println!("{:?}: {:?}", sat, msg);
+    }
 
 }
