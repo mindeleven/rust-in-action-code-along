@@ -22,6 +22,7 @@
 /// so implementing copy for the type isn't a problem
 /// adding #[derive(Copy)] tells the compiler to add an implementation itself
 #[derive(Copy, Clone, Debug)]
+#[allow(dead_code)]
 struct CubeSat {
     id: u64,
 }
@@ -29,28 +30,36 @@ struct CubeSat {
 #[derive(Debug)]
 enum StatusMessage {
     Ok,
+    Panic,
 }
 
 /// implementing the Copy trait manually for status message
 impl Copy for StatusMessage { }
 
+/// implementing Copy requires an implementation of Clone
 impl Clone for StatusMessage {
     fn clone(&self) -> Self {
+        // dereferencing self
         *self
     }
 }
 
 fn check_status(sat_id: CubeSat) -> StatusMessage {
-    StatusMessage::Ok
+    if sat_id.id != 666 {
+        StatusMessage::Ok
+    } else {
+        StatusMessage::Panic
+    }
 }
 
 fn main() {
     let sat_a = CubeSat { id: 0 };
 
-    let a_status = check_status(sat_a);
+    let a_status = check_status(sat_a.clone());
 
     println!("a: {:?}", a_status);
-
+    
+    // this will work now because the object has been copied before
     let a_status = check_status(sat_a);
     
     println!("a: {:?}", a_status);
